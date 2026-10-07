@@ -53,7 +53,9 @@ The conventional `assets/hero.*` file, when present, is shown above the article 
 
 The files `left-aside.mdx` and `right-aside.mdx` beside this entrypoint populate the article's left and right rails. Both are optional and discovered by filename, so there is no frontmatter setting to connect them. The right rail also contains tags and the table of contents. `hello-world` demonstrates an article without either sidecar.
 
-## Code and syntax highlighting
+## Showing code
+
+Fenced code blocks display source code as article content. Add a language after the opening fence to enable syntax highlighting. The source inside the fence is shown to the reader and is not executed:
 
 ```ts
 type Post = {
@@ -63,6 +65,25 @@ type Post = {
 
 const post: Post = { title: 'Kitchen sink', published: true };
 ```
+
+Use ordinary Markdown fences for examples in JavaScript, TypeScript, CSS, shell commands, configuration, or any other language supported by the highlighter.
+
+## Using code in MDX
+
+An `index.mdx` article can also import local assets or components and use HTML-like markup in the article itself. This is different from a fenced code block: MDX imports and expressions run while Astro builds the page, while the resulting HTML stays static unless an interactive component is deliberately hydrated.
+
+This article imports its light and dark illustrations at the top of the file. The same pattern can be used for an ordinary local image:
+
+```mdx
+import illustration from './assets/example.svg';
+
+<figure>
+  <img src={illustration.src} alt="A geometric landscape" />
+  <figcaption>A local image imported by the article.</figcaption>
+</figure>
+```
+
+MDX is useful when Markdown alone cannot express the content clearly: imported media, semantic HTML such as `<details>`, or a small reusable Astro component. Prefer plain Markdown for ordinary prose, headings, lists, links, and code samples.
 
 ## Math
 
@@ -81,7 +102,7 @@ flowchart LR
   Assets --> Site
 ```
 
-## MDX
+## Native HTML in MDX
 
 <details>
   <summary>This native disclosure works without a client framework</summary>

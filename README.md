@@ -50,7 +50,7 @@ src/content/blog/my-post/
     └── image.png
 ```
 
-Use frontmatter fields `title`, `description`, `pubDate`, `updatedDate`, `draft`, and `tags`. Drafts appear during development and are excluded from production pages, RSS, and sitemap. The included demo articles are drafts, so they remain available while developing and do not ship in production unless you remove `draft: true`.
+Use frontmatter fields `title`, `description`, `pubDate`, `updatedDate`, `draft`, and `tags`. Drafts appear during development and are excluded from production pages, RSS, and sitemap. The included demo articles are drafts, so they remain available while developing and do not ship in production unless you remove `draft: true`. `customizing-the-starter` provides a short setup walkthrough, while `kitchen-sink` demonstrates the article features and explains when to use Markdown or MDX.
 
 Both sidecars are optional. Name them exactly `left-aside.mdx` and `right-aside.mdx`; no frontmatter or registry is needed. Reference colocated images with paths such as `./assets/image.png`. Supported image formats are AVIF, GIF, JPEG, JPG, PNG, SVG, and WebP.
 
