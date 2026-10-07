@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import ShortcutKey from './ShortcutKey.astro';
+
+type Props = HTMLAttributes<'a'> & { shortcut?: string };
+
+const { href, class: className, shortcut, ...props } = Astro.props;
+const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
+const subpath = pathname.match(/[^\/]+/g);
+const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
+---
+
+<a href={href} class:list={[className, { active: isActive }]} data-navigation-shortcut={shortcut} {...props}>
+	{shortcut ? <ShortcutKey shortcuts={[shortcut]} active={isActive}><slot /></ShortcutKey> : <slot />}
+</a>
+<style>
+	a {
+		color: var(--muted);
+		text-decoration: none;
+		text-decoration-thickness: 2px;
+	}
+	a.active {
+		color: var(--accent);
+		font-weight: 700;
+	}
+</style>

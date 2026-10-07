@@ -1,0 +1,50 @@
+---
+interface Props {
+	shortcuts: string[];
+	active?: boolean;
+}
+
+const { shortcuts, active = false } = Astro.props;
+---
+
+<span class="shortcut-key">
+	<span class="shortcut-keys">
+		{shortcuts.map((shortcut) => (
+			<kbd class:list={{ active, single: shortcut.length === 1 }} aria-hidden="true">
+				{active ? '▶' : shortcut}
+			</kbd>
+		))}
+	</span>
+	<span><slot /></span>
+</span>
+
+<style>
+	.shortcut-key {
+		display: inline-flex;
+		gap: 0.4em;
+		align-items: center;
+	}
+	.shortcut-keys {
+		display: inline-flex;
+		gap: 1px;
+	}
+	kbd {
+		display: inline-grid;
+		min-width: 1.25em;
+		height: 1.25em;
+		place-items: center;
+		padding: 0 0.25em;
+		border: 1px solid currentColor;
+		border-radius: var(--radius-sm);
+		font: inherit;
+		font-size: 0.8em;
+		line-height: 1;
+	}
+	kbd.single {
+		width: 1.25em;
+		padding: 0;
+	}
+	kbd.active {
+		border-color: transparent;
+	}
+</style>

@@ -1,0 +1,8 @@
+<script>
+	// @ts-check
+	import { createInteractionController } from '../lib/input/controller.js';
+
+	const mount = () => createInteractionController().mount();
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, { once: true });
+	else mount();
+</script>

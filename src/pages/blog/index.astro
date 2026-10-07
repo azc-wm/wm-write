@@ -1,0 +1,107 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { site } from '../../site.config';
+
+const posts = (await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft)).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) => a.localeCompare(b));
+const monthFormatter = new Intl.DateTimeFormat(site.language, { month: 'long' });
+const archive = posts.reduce<{ year: number; months: { month: number; label: string; posts: typeof posts }[] }[]>((years, post) => {
+	const year = post.data.pubDate.getFullYear();
+	const month = post.data.pubDate.getMonth();
+	let yearGroup = years.find((group) => group.year === year);
+	if (!yearGroup) {
+		yearGroup = { year, months: [] };
+		years.push(yearGroup);
+	}
+	let monthGroup = yearGroup.months.find((group) => group.month === month);
+	if (!monthGroup) {
+		monthGroup = { month, label: monthFormatter.format(post.data.pubDate), posts: [] };
+		yearGroup!.months.push(monthGroup);
+	}
+	monthGroup!.posts.push(post);
+	return years;
+}, []);
+---
+
+<!doctype html>
+<html lang={site.language}>
+	<head>
+		<BaseHead title={site.title} description={site.description} />
+		<style>
+			.writing-index { margin: 0; padding: 0; list-style: none !important; }
+			.archive-year { margin-top: var(--space-12); }
+			.archive-year > summary { margin: 0 0 var(--space-4); cursor: pointer; list-style: none; }
+			.archive-year > summary::-webkit-details-marker { display: none; }
+			.archive-year > summary::before { content: '↓'; display: inline-block; margin-right: .5rem; color: var(--muted); font-size: .72rem; line-height: 1; }
+			.archive-year:not([open]) > summary::before { content: '→'; }
+	.archive-year > summary h2 { display: inline; margin: 0; font-size: 1.3rem; font-weight: normal; }
+			.archive-month { border-top: 1px solid var(--line); }
+			.archive-month summary { padding: var(--space-3) 0; color: var(--muted); font-size: .72rem; cursor: pointer; list-style: none; }
+			.archive-month summary::-webkit-details-marker { display: none; }
+			.archive-month summary::before { content: '＋'; display: inline-block; width: 1rem; color: var(--muted); }
+			.archive-month[open] summary::before { content: '−'; }
+			.writing-entry { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: var(--space-6); padding: 1.25rem 0 var(--space-6); border-top: 1px solid var(--line); }
+			.writing-entry:last-child { border-bottom: 1px solid var(--line); }
+			.writing-entry a { display: block; color: inherit; text-decoration: none; }
+			.date { grid-column: 1; margin: .15rem 0 0; color: var(--muted); font-size: .72rem; }
+	.writing-entry-content { grid-column: 2; }
+	.title { margin: 0 0 .55rem; font-size: 1.05rem; font-weight: normal; }
+	.description { max-width: 58ch; margin: 0; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+			.tags { display: flex; flex-wrap: wrap; gap: .35rem .65rem; margin: .8rem 0 0; color: var(--muted); font-size: .68rem; }
+			.tag-index { margin: var(--space-8) 0 var(--space-12); }
+			.tag-index h2 { margin-bottom: .75rem; color: var(--accent); font-size: .8rem; font-weight: normal; }
+			.tag-index ul { display: flex; flex-wrap: wrap; gap: .35rem var(--space-4); margin: 0; padding: 0; color: var(--muted); font-size: var(--font-size-sm); list-style: none; }
+			.writing-entry a:hover .title, .writing-entry a:focus-visible .title { color: var(--accent); }
+		</style>
+	</head>
+	<body data-page="archive">
+		<Header />
+		<main>
+			<div class="page-content"><section aria-labelledby="writing-title">
+				<h1 id="writing-title">Writing</h1>
+				{allTags.length > 0 && <nav class="tag-index" aria-labelledby="tag-index-title">
+					<h2 id="tag-index-title">Topics</h2>
+					<ul>{allTags.map((tag) => <li>#{tag}</li>)}</ul>
+				</nav>}
+				{posts.length === 0 ? (
+					<p class="empty-state">Writing is temporarily empty. Check back soon.</p>
+				) : archive.map((yearGroup) => (
+					<details class="archive-year" data-archive-node open>
+						<summary data-focus-target><h2>{yearGroup.year}</h2></summary>
+						{yearGroup.months.map((monthGroup) => (
+							<details class="archive-month" data-archive-node open>
+								<summary data-focus-target>{monthGroup.label}</summary>
+								<ol class="writing-index">
+									{monthGroup.posts.map((post) => (
+										<li class="writing-entry">
+											<p class="date"><FormattedDate date={post.data.pubDate} /></p>
+											<a href={`/blog/${post.id}/`} class="writing-entry-content">
+												<h3 class="title">{post.data.title}</h3>
+												<p class="description">{post.data.description}</p>
+												{post.data.tags?.length && <p class="tags">{post.data.tags.map((tag) => <span>#{tag}</span>)}</p>}
+											</a>
+										</li>
+									))}
+								</ol>
+							</details>
+						))}
+					</details>
+				))}
+			</section></div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	@media (max-width: 600px) {
+		.writing-entry { grid-template-columns: 1fr; gap: .5rem; }
+		.date, .writing-entry-content { grid-column: 1; }
+	}
+</style>

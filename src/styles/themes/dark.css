@@ -1,0 +1,17 @@
+:root[data-theme='dark'] {
+	color-scheme: dark;
+	--background: #1a1b1e;
+	--text: #d8d2c7;
+	--muted: #aaa59b;
+	--line: #45474a;
+	--inline-code: #2a2c30;
+	--code-background: #202226;
+	--accent: #d6b36a;
+	--secondary: #9bb8ac;
+	--tertiary: #c6a2bd;
+	--link: #c5a8dd;
+	--marker: #e0a56f;
+	--strong: #d28a96;
+	--emphasis: #c5a8dd;
+	--focus: #d6b36a;
+}

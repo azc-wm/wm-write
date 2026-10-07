@@ -1,0 +1,55 @@
+<div class="document-rail" data-scrollbar aria-hidden="true">
+	<div class="rail-track">
+		<svg class="rail-svg" viewBox="0 0 16 100" preserveAspectRatio="none">
+			<line class="rail-base" x1="8" x2="8" y1="0" y2="100" />
+			<line class="rail-progress" data-scroll-progress x1="8" x2="8" y1="0" y2="0" />
+		</svg>
+	</div>
+	<script is:inline>
+		const root = document.currentScript?.closest('[data-scrollbar]');
+		let stop = () => {};
+
+		const start = () => {
+			document.removeEventListener('DOMContentLoaded', start);
+			const scroller = document.querySelector('[data-scroll-container]');
+			const progress = root?.querySelector('[data-scroll-progress]');
+			if (!(scroller instanceof HTMLElement) || !(progress instanceof SVGElement)) return;
+
+			const update = () => {
+				const max = scroller.scrollHeight - scroller.clientHeight;
+				const value = max > 0 ? Math.min(100, Math.max(0, (scroller.scrollTop / max) * 100)) : 0;
+				progress.setAttribute('y2', `${value}`);
+			};
+			const observer = new ResizeObserver(update);
+			observer.observe(scroller);
+			scroller.addEventListener('scroll', update, { passive: true });
+			addEventListener('resize', update);
+			update();
+
+			stop = () => {
+				scroller.removeEventListener('scroll', update);
+				removeEventListener('resize', update);
+				observer.disconnect();
+			};
+		};
+
+		const cleanup = () => {
+			document.removeEventListener('DOMContentLoaded', start);
+			stop();
+		};
+		if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
+		else start();
+		document.addEventListener('astro:before-swap', cleanup, { once: true });
+	</script>
+</div>
+
+<style>
+	.document-rail { display: none; position: relative; align-self: stretch; width: 44px; min-height: 0; padding-block: 3rem; box-sizing: border-box; }
+	.rail-track { position: relative; height: 100%; min-height: 100%; }
+	.rail-svg { display: block; position: absolute; inset: 0; width: 16px; height: 100%; overflow: visible; pointer-events: none; }
+	.rail-base, .rail-progress { fill: none; vector-effect: non-scaling-stroke; }
+	.rail-base { stroke: var(--line); stroke-width: 1; }
+	.rail-progress { stroke: var(--text); stroke-width: 2; }
+
+	@media (min-width: 1100px) { .document-rail { display: block; } }
+</style>

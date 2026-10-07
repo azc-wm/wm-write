@@ -1,0 +1,36 @@
+---
+import HeaderLink from './HeaderLink.astro';
+import { site } from '../site.config';
+---
+
+<header>
+	<nav>
+		<div class="primary-links">
+			{site.navigation.map(({ label, href, shortcut }) => <HeaderLink href={href} shortcut={shortcut}>{label}</HeaderLink>)}
+		</div>
+	</nav>
+</header>
+
+<style>
+	header {
+		grid-area: header;
+		z-index: 20;
+		box-sizing: border-box;
+		width: 100%;
+		margin-inline: auto;
+		min-height: 3.75rem;
+		padding: var(--space-4) var(--space-2);
+		background: var(--background);
+		border-bottom: 1px solid var(--line);
+	}
+	nav {
+		display: flex;
+		width: 100%;
+		min-height: 1.6rem;
+		gap: var(--space-4);
+		align-items: baseline;
+		justify-content: space-between;
+		flex-wrap: nowrap;
+	}
+	.primary-links { display: flex; gap: var(--space-6); }
+</style>

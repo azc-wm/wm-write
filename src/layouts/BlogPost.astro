@@ -1,0 +1,104 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import type { ImageMetadata } from 'astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import Scrollbar from '../components/Scrollbar.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import { site } from '../site.config';
+
+type Heading = { depth: number; slug: string; text: string };
+type Props = Partial<CollectionEntry<'blog'>['data']> & { title: string; description: string; pubDate?: Date; updatedDate?: Date; heroImage?: ImageMetadata; ogImage?: ImageMetadata | string; headings?: Heading[]; pageType?: import('../lib/input/actions.js').PageType };
+
+const { title, description, pubDate, updatedDate, tags = [], heroImage, ogImage, headings = [], pageType = 'article' } = Astro.props;
+const hasLeftAside = Astro.slots.has('left-aside');
+const hasMetaAside = Astro.slots.has('aside') || tags.length > 0 || headings.some(({ depth }) => depth === 2 || depth === 3);
+---
+
+<html lang={site.language}>
+	<head>
+		<BaseHead title={title} description={description} image={ogImage ?? heroImage} article={pageType === 'article'} pubDate={pubDate} updatedDate={updatedDate} />
+	</head>
+	<body data-page={pageType}>
+		<Header />
+		<aside class="writing-left" aria-label={hasLeftAside ? 'Context and document navigation' : undefined} aria-hidden={!hasLeftAside}>
+			{hasLeftAside && <div class="writing-aside writing-context"><slot name="left-aside" /></div>}
+			<Scrollbar />
+		</aside>
+		<main class="writing-main" data-scroll-container>
+			<article class="writing-article">
+				{pubDate && <div class="date">
+					<FormattedDate date={pubDate} />
+					{updatedDate && <div class="last-updated-on">Last updated on <FormattedDate date={updatedDate} /></div>}
+				</div>}
+				{heroImage && <div class="hero-image"><Image width={1020} height={510} src={heroImage} alt="" /></div>}
+				<header class="title">
+					<h1>{title}</h1><hr />
+				</header>
+				<slot />
+			</article>
+		</main>
+		{hasMetaAside && <aside class="writing-aside writing-meta" aria-label="Page details and navigation">
+			<slot name="aside" />
+			{tags.length > 0 && <div class="aside-section"><h2>Tags</h2><ul>{tags.map((tag) => <li>#{tag}</li>)}</ul></div>}
+			<TableOfContents headings={headings} />
+		</aside>}
+		<Footer />
+		<script>
+			const sources = [...document.querySelectorAll('pre')].filter(
+				(pre) => pre.dataset.language === 'mermaid' || pre.querySelector(':scope > code.language-mermaid'),
+			);
+			if (sources.length) {
+				const diagrams = sources.map((source) => {
+					const pre = source;
+					const diagram = document.createElement('div');
+					diagram.className = 'mermaid';
+					diagram.textContent = pre.textContent || '';
+					pre.replaceWith(diagram);
+					return { pre, diagram };
+				});
+				try {
+					const { default: mermaid } = await import('mermaid');
+					mermaid.initialize({
+						startOnLoad: false,
+						securityLevel: 'strict',
+						theme: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'default',
+					});
+					await mermaid.run({ nodes: diagrams.map(({ diagram }) => diagram) });
+				} catch (error) {
+					console.error('Mermaid diagram failed to render', error);
+					diagrams.forEach(({ pre, diagram }) => diagram.replaceWith(pre));
+				}
+			}
+		</script>
+	</body>
+</html>
+
+<style>
+	.writing-left { display: contents; }
+	.writing-main { grid-area: main; }
+	.writing-article { width: 100%; min-width: 0; }
+	.writing-meta { grid-area: meta; align-self: stretch; }
+	.mermaid { margin: var(--space-6) 0; overflow-x: auto; }
+	.mermaid svg { max-width: 100%; height: auto; }
+	.title { margin-bottom: var(--space-8); } .title h1 { margin-bottom: var(--space-1); color: var(--accent); } .date { margin-bottom: var(--space-3); color: var(--muted); font-size: .9em; font-style: italic; } .last-updated-on { margin-top: var(--space-1); }
+	.writing-aside { max-width: 280px; margin: var(--space-8) 0; color: var(--muted); font-size: var(--font-size-sm); }
+	:global(.writing-aside h2) { color: var(--accent); }
+	.writing-context { text-align: left; }
+	.aside-section + .aside-section { margin-top: 2.5rem; }
+	.writing-aside ul { margin: 0; padding: 0; list-style: none; }
+	.writing-aside li { margin: .35rem 0; } .writing-aside a { color: inherit; text-decoration: none; }
+	@media (max-width: 700px) {
+		.writing-aside { max-width: none; text-align: center; }
+	}
+	@media (min-width: 1100px) {
+		.writing-left { grid-area: rail; display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: var(--space-4); min-width: 0; }
+		.writing-left > :global([data-scrollbar]) { grid-column: 2; grid-row: 1; }
+		.writing-context { grid-column: 1; grid-row: 1; position: sticky; top: 4.5rem; align-self: start; justify-self: end; margin: var(--space-12) 0 0; text-align: right; }
+		.writing-meta { width: 100%; max-width: none; min-height: 0; margin: 0; padding-top: var(--space-12); box-sizing: border-box; }
+		:global(.writing-meta > *) { max-width: 220px; }
+	}
+</style>

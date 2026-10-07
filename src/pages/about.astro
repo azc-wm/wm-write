@@ -1,0 +1,17 @@
+---
+import { Content as About, getHeadings } from '../content/about.mdx';
+import Prose from '../components/Prose.astro';
+import Layout from '../layouts/BlogPost.astro';
+import { site } from '../site.config';
+
+const headings = getHeadings();
+---
+
+<Layout
+	title="About"
+	description={site.description}
+	pageType="static"
+	headings={headings}
+>
+	<Prose><About /></Prose>
+</Layout>

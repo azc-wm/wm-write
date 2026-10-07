@@ -1,0 +1,18 @@
+:root,
+:root[data-theme='light'] {
+	color-scheme: light;
+	--background: #f3efe7;
+	--text: #454752;
+	--muted: #666a73;
+	--line: #c8c7c1;
+	--inline-code: #e7e4dc;
+	--code-background: #e4e2dc;
+	--accent: #8b3f52;
+	--secondary: #2f716d;
+	--tertiary: #8b641f;
+	--link: #70508f;
+	--marker: #955d2f;
+	--strong: #a04438;
+	--emphasis: #76538d;
+	--focus: #8b3f52;
+}

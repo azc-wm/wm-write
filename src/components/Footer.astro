@@ -1,0 +1,54 @@
+---
+import { site } from '../site.config';
+import ShortcutKey from './ShortcutKey.astro';
+
+const today = new Date();
+---
+
+<footer>
+	<p class="commands" aria-label="Keyboard commands">
+		<button id="theme-toggle" type="button"><ShortcutKey shortcuts={['m']}>theme</ShortcutKey></button>
+		<ShortcutKey shortcuts={['+', '-']}>width</ShortcutKey>
+		<ShortcutKey shortcuts={['↑', '↓']}>navigate</ShortcutKey>
+		<ShortcutKey shortcuts={['h', 'l']}>archive</ShortcutKey>
+		<ShortcutKey shortcuts={['↵']}>toggle</ShortcutKey>
+		<ShortcutKey shortcuts={['esc']}>clear focus</ShortcutKey>
+	</p>
+	<div class="footer-meta">
+		<small class="copyright">&copy; {today.getFullYear()} {site.author.name}.</small>
+		<nav class="social-links" aria-label="External links">
+			{site.links.map(({ label, href }) => <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noreferrer' : undefined}>{label}</a>)}
+		</nav>
+	</div>
+</footer>
+
+<style>
+	footer {
+		grid-area: footer;
+		z-index: 20;
+		box-sizing: border-box;
+		width: 100%;
+		margin-inline: auto;
+		min-width: 0;
+		min-height: 4.5rem;
+		background: var(--background);
+		padding: 0.65rem var(--space-4) var(--space-2);
+		border-top: 1px solid var(--line);
+	}
+	.commands {
+		display: flex;
+		margin: 0 0 0.4rem;
+		gap: var(--space-4);
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		color: var(--muted);
+		font-size: 0.85em;
+	}
+	.commands span,
+	.commands button { white-space: nowrap; }
+	.footer-meta { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-4); }
+	.copyright { display: block; margin: 0; color: var(--muted); font-size: var(--font-size-xs); line-height: 1; }
+	.social-links { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-4); margin: 0; padding: 0; font-size: var(--font-size-xs); line-height: 1; white-space: nowrap; }
+	.social-links a { color: var(--muted); font: inherit; }
+	button { padding: 0; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+</style>
