@@ -46,6 +46,8 @@ export const site = {
 - `seo.index` allows production indexing. Preview safety still takes precedence.
 - `seo.socialImage` is the root-relative fallback image used when an article bundle supplies no suitable image.
 
+See [SEO and indexing](seo-and-indexing.md) for the effective indexing rule and emitted metadata.
+
 ## Indexing by environment
 
 Effective indexing is:

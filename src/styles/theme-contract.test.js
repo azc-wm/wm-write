@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 function paletteTokens(file) {
-	return [...readFileSync(new URL(file, import.meta.url), 'utf8').matchAll(/\t--([\w-]+):/g)]
+	return [...readFileSync(new URL(file, import.meta.url), 'utf8').matchAll(/^\s*--([\w-]+)\s*:/gm)]
 		.map(([, name]) => name)
 		.sort();
 }

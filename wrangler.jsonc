@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "astro-editorial-blog-starter",
+  "name": "wm-write",
   "compatibility_date": "2026-09-24",
   "assets": {
     "directory": "./dist",

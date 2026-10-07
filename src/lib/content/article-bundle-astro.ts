@@ -1,5 +1,6 @@
 import type { ImageMetadata } from 'astro';
-import { resolveArticleBundle } from './article-bundle.js';
+import { site } from '../../site.config.ts';
+import { resolveArticleBundle, selectArticleSocialImage } from './article-bundle.js';
 
 const images = import.meta.glob<ImageMetadata>('../../content/blog/**/*.{avif,gif,jpeg,jpg,png,svg,webp}', { eager: true, import: 'default' });
 const entries = import.meta.glob('../../content/blog/**/index.{md,mdx}');
@@ -14,9 +15,14 @@ export function getArticleBundle(post: { id: string }) {
 	];
 	const bundle = resolveArticleBundle({ id: post.id, files });
 	const imageFor = (path?: string) => path ? images[`../../${path.replace(/^src\//, '')}`] : undefined;
+	const socialImagePath = selectArticleSocialImage({
+		socialImage: bundle.socialImage,
+		hero: bundle.hero,
+		fallback: site.seo.socialImage,
+	});
 	return {
 		heroImage: imageFor(bundle.hero),
-		socialImage: imageFor(bundle.socialImage),
+		socialImage: imageFor(socialImagePath) ?? socialImagePath,
 		LeftAside: bundle.leftAsidePath ? sidecars[`../../${bundle.leftAsidePath.replace(/^src\//, '')}`] : undefined,
 		RightAside: bundle.rightAsidePath ? sidecars[`../../${bundle.rightAsidePath.replace(/^src\//, '')}`] : undefined,
 	};

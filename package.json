@@ -1,10 +1,10 @@
 {
-  "name": "astro-editorial-blog-starter",
+  "name": "wm-write",
   "private": true,
   "type": "module",
   "version": "0.1.0",
-  "description": "An opinionated, keyboard-friendly Astro starter for technical writing",
-  "license": "MIT",
+  "description": "An opinionated, keyboard-friendly Astro starter for technical and personal writing",
+  "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/azc-wm/wm-write.git"

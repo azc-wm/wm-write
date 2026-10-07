@@ -27,10 +27,9 @@ Open Graph and Twitter use this deterministic fallback:
 
 1. `assets/social.*`
 2. `assets/hero.*`
-3. the first remaining supported image in `assets/`, sorted by path/name in ascending order
-4. `site.seo.socialImage`
+3. `site.seo.socialImage`
 
-The metadata layer makes the selected URL absolute using `site.url`. The fallback asset does not need to be referenced by the article body. Hero and social relationships are filesystem conventions, so article frontmatter does not include `heroImage` or `socialImage`.
+Other supported images in `assets/` do not become social previews automatically, whether or not they are referenced by the article. The metadata layer makes the selected URL absolute using `site.url`. Hero and social relationships are filesystem conventions, so article frontmatter does not include `heroImage` or `socialImage`.
 
 ## Light and dark image variants
 

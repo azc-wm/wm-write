@@ -1,6 +1,6 @@
-# Astro Editorial Blog Starter
+# wm-write
 
-A static, keyboard-friendly technical blog built with Astro. The layout is intentionally editorial: a centered article, optional side rails, a table of contents, and a small set of adjustable theme tokens.
+An opinionated, keyboard-friendly Astro starter for technical and personal writing. The layout is intentionally editorial: a centered article, optional side rails, a table of contents, and a small set of adjustable theme tokens.
 
 ## Features
 
@@ -54,7 +54,7 @@ Use frontmatter fields `title`, `description`, `pubDate`, `updatedDate`, `draft`
 
 Both sidecars are optional. Name them exactly `left-aside.mdx` and `right-aside.mdx`; no frontmatter or registry is needed. Reference colocated images with paths such as `./assets/image.png`. Supported image formats are AVIF, GIF, JPEG, JPG, PNG, SVG, and WebP.
 
-`assets/hero.*` supplies the visible article hero. `assets/social.*` supplies the article's social preview. Each may have at most one supported file. Open Graph and Twitter image fallback is `social.*`, then `hero.*`, then the first remaining supported image in `assets/` sorted by path/name, then `site.seo.socialImage`. The fallback image does not need to appear in the article body.
+`assets/hero.*` supplies the visible article hero. `assets/social.*` supplies the article's social preview. Each may have at most one supported file. Open Graph and Twitter image fallback is `social.*`, then `hero.*`, then `site.seo.socialImage`. Other files in `assets/` do not become social previews automatically.
 
 For artwork that needs separate light and dark variants, see the paired `image-light` / `image-dark` example in [`kitchen-sink`](src/content/blog/kitchen-sink/index.mdx). It crossfades with the site's current theme using CSS. The image and theme-color transitions share `--duration-normal` (300 ms), and reduced-motion preferences shorten both.
 
@@ -74,6 +74,7 @@ Edit [`src/styles/tokens.css`](src/styles/tokens.css) for shared typography, spa
 - In archives and static pages, `j`/`k` or arrow keys move focus. In the archive, `h`/`l` collapse or expand and `Enter` toggles a section.
 
 Every action also has an ordinary link, button, or native HTML interaction.
+See the [keyboard navigation contract](docs/features/keyboard-navigation.md) for exact behavior.
 
 ## SEO, RSS, and sitemap
 
@@ -81,7 +82,9 @@ Canonical URLs and the Astro sitemap use `site.url`. The sitemap and `/rss.xml` 
 
 For non-production builds, `/robots.txt` disallows crawling and every page emits `noindex, nofollow`. Production indexability also requires `site.seo.index: true`. When enabled, robots allows crawling and points to the configured sitemap.
 
-Page descriptions and social metadata come from page and post content. Article Open Graph and Twitter images follow this order: `assets/social.*`, `assets/hero.*`, first remaining supported image in the article's `assets/` folder sorted by path/name, then `site.seo.socialImage`. Image URLs are absolute. Use a 1200 × 630 image for social previews. Replace `public/social/default.png` with your own fallback.
+Page descriptions and social metadata come from page and post content. Article Open Graph and Twitter images follow this order: `assets/social.*`, `assets/hero.*`, then `site.seo.socialImage`. Image URLs are absolute. Use a 1200 × 630 image for social previews. Replace `public/social/default.png` with your own fallback.
+
+See the [SEO and indexing](docs/features/seo-and-indexing.md) and [RSS and sitemap](docs/features/rss-and-sitemap.md) contracts for generated metadata and feed behavior.
 
 ## Deployment
 
@@ -97,6 +100,8 @@ pnpm exec wrangler deploy
 ```
 
 Add a custom domain through Cloudflare after deployment; no personal domain or route is configured here.
+
+See the [Cloudflare deployment contract](docs/features/deployment-cloudflare.md) for the static deployment boundary.
 
 ### Vercel
 
@@ -124,6 +129,12 @@ src/
 
 This is an opinionated starter, not a theme framework. Edit content and configuration for a normal site; change components only when you want to change how the design works.
 
+See the [design principles](docs/design/design-principles.md) for the visual philosophy behind the starter.
+
 ## License
 
-MIT. See [LICENSE](LICENSE).
+wm-write is source-available under the MIT License with the Commons Clause License Condition v1.0.
+
+You may use, modify, fork, and redistribute wm-write for personal or commercial projects, including monetized websites. You may not sell wm-write itself, or a product or service whose value derives entirely or substantially from wm-write.
+
+See [LICENSE](LICENSE) for the complete terms.

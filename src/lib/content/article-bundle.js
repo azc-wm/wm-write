@@ -24,16 +24,16 @@ export function resolveArticleBundle({ id, files }) {
 	const imageExtensions = articleImageExtensions.join('|');
 	const hero = selectUnique(files, new RegExp(`^${directory}/assets/hero\\.(?:${imageExtensions})$`, 'i'), 'hero', id);
 	const socialImage = selectUnique(files, new RegExp(`^${directory}/assets/social\\.(?:${imageExtensions})$`, 'i'), 'social', id);
-	const firstAssetImage = files
-		.filter((file) => file.startsWith(`${directory}/assets/`) && new RegExp(`\\.(?:${imageExtensions})$`, 'i').test(file))
-		.filter((file) => file !== hero && file !== socialImage)
-		.sort()[0];
 
 	return {
 		index,
 		leftAsidePath: files.includes(`${directory}/left-aside.mdx`) ? `${directory}/left-aside.mdx` : undefined,
 		rightAsidePath: files.includes(`${directory}/right-aside.mdx`) ? `${directory}/right-aside.mdx` : undefined,
 		hero,
-		socialImage: socialImage ?? hero ?? firstAssetImage,
+		socialImage,
 	};
+}
+
+export function selectArticleSocialImage({ socialImage, hero, fallback }) {
+	return socialImage ?? hero ?? fallback;
 }

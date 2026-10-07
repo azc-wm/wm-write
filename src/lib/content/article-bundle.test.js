@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { resolveArticleBundle, selectArticleEntrypoint } from './article-bundle.js';
+import { resolveArticleBundle, selectArticleEntrypoint, selectArticleSocialImage } from './article-bundle.js';
 
 const dir = 'src/content/blog/post';
 
@@ -28,17 +28,21 @@ test('resolves one conventional hero and rejects ambiguous candidates', () => {
 	assert.throws(() => resolveArticleBundle({ id: 'post', files: [...base, `${dir}/assets/hero.png`] }), /multiple hero images/);
 });
 
-test('uses social, hero, first remaining assets image in precedence order', () => {
+test('arbitrary assets never become an implicit social image', () => {
 	const index = `${dir}/index.md`;
-	const first = `${dir}/assets/a-diagram.svg`;
-	const second = `${dir}/assets/z-screenshot.png`;
-	const hero = `${dir}/assets/hero.webp`;
+	const first = `${dir}/assets/a-debug-diagram.svg`;
+	const second = `${dir}/assets/z-image.png`;
+	const files = [index, second, first];
+	assert.equal(resolveArticleBundle({ id: 'post', files }).socialImage, undefined);
+});
+
+test('selects social, then hero, then the global fallback', () => {
 	const social = `${dir}/assets/social.png`;
-	const files = [index, second, first, hero, social];
-	const resolve = (subset) => resolveArticleBundle({ id: 'post', files: subset });
-	assert.equal(resolve(files).socialImage, social);
-	assert.equal(resolve(files.filter((file) => file !== social)).socialImage, hero);
-	assert.equal(resolve(files.filter((file) => file !== social && file !== hero)).socialImage, first);
-	assert.equal(resolve([index]).socialImage, undefined);
-	assert.throws(() => resolve([...files, `${dir}/assets/social.webp`]), /multiple social images/);
+	const hero = `${dir}/assets/hero.webp`;
+	const fallback = '/social/default.png';
+	assert.equal(selectArticleSocialImage({ socialImage: social, hero, fallback }), social);
+	assert.equal(selectArticleSocialImage({ hero, fallback }), hero);
+	assert.equal(selectArticleSocialImage({ fallback }), fallback);
+	assert.throws(() => resolveArticleBundle({ id: 'post', files: [`${dir}/index.md`, social, `${dir}/assets/social.webp`] }), /multiple social images/);
+	assert.throws(() => resolveArticleBundle({ id: 'post', files: [`${dir}/index.md`, hero, `${dir}/assets/hero.png`] }), /multiple hero images/);
 });
