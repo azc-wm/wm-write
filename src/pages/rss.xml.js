@@ -17,7 +17,7 @@ export async function GET({ site: astroSite }) {
 			title: post.data.title,
 			description: post.data.description,
 			pubDate: post.data.pubDate,
-			link: localUrl(`/blog/${post.id}/`),
+			link: `blog/${post.id}/`,
 			author: site.author.email,
 			categories: post.data.tags,
 		})),
