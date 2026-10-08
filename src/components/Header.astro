@@ -32,5 +32,6 @@ import { site } from '../site.config';
 		justify-content: space-between;
 		flex-wrap: nowrap;
 	}
-	.primary-links { display: flex; gap: var(--space-6); }
+	.primary-links { display: flex; width: 100%; gap: var(--space-6); }
+	.primary-links :global(a[data-navigation-shortcut='0']) { margin-inline-start: auto; }
 </style>
