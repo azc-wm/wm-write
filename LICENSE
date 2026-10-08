@@ -20,14 +20,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-“Commons Clause” License Condition v1.0
+Additional Condition — No Commercial Redistribution of the Starter
 
-The Software is provided to you by the Licensor under the License, as defined below, subject to the following condition.
-
-Without limiting other conditions in the License, the grant of rights under the License will not include, and the License does not grant to you, the right to Sell the Software.
-For purposes of the foregoing, “Sell” means practicing any or all of the rights granted to you under the License to provide to third parties, for a fee or other consideration (including without limitation fees for hosting or consulting/ support services related to the Software), a product or service whose value derives, entirely or substantially, from the functionality of the Software. Any license notice or attribution required by the License must also include this Commons Clause License Condition notice.
+Copyright holder: Axel Zango Copons
 Software: wm-write
 
-License: MIT License
+You may use, modify, host, and deploy the Software for personal or commercial purposes, including monetized websites, client projects, and paid development, customization, maintenance, hosting, and consulting services.
 
-Licensor: Axel Zango Copons
+However, you may not sell, license for a fee, or otherwise provide for monetary consideration the Software, or a modified or derivative version of it, when it is offered as a reusable website template, theme, starter kit, boilerplate, or substantially equivalent software product. This restriction applies regardless of changes to branding, appearance, features, or packaging.
+
+This restriction does not prohibit charging for websites, applications, or services built using the Software, or for work performed using or adapting the Software, provided the item being sold is not itself a reusable template, theme, starter kit, boilerplate, or substantially equivalent software product.
+
+This Additional Condition modifies the MIT License above only to the extent of the commercial redistribution restriction stated here. All other MIT License terms remain in effect. This combined license is source-available and is not an OSI-approved open-source license.
+
+Include this Additional Condition together with the MIT License in any copies or substantial portions of the Software.

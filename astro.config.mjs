@@ -10,7 +10,8 @@ import remarkMath from 'remark-math';
 
 // https://astro.build/config
 export default defineConfig({
-	site: site.url,
+	site: process.env.SITE_URL ?? site.url,
+	base: process.env.SITE_BASE ?? '/',
 	markdown: {
 		processor: unified({
 			remarkPlugins: [remarkMath],

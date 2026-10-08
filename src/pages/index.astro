@@ -1,13 +1,15 @@
 ---
+import { isVisiblePost } from '../lib/content/visibility';
 import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import Prose from '../components/Prose.astro';
 import { site } from '../site.config';
+import { localUrl } from '../lib/urls';
 import { Content as Welcome } from '../content/welcome.mdx';
 
-const latestPosts = (await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft))
+const latestPosts = (await getCollection('blog', ({ data }) => isVisiblePost(data)))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 3);
 ---
@@ -29,7 +31,7 @@ const latestPosts = (await getCollection('blog', ({ data }) => import.meta.env.D
 				{latestPosts.length === 0 ? <p class="empty-state">Writing is temporarily empty. Check back soon.</p> : <ol class="latest-grid">
 					{latestPosts.map((post) => (
 						<li class="post-card">
-							<a href={`/blog/${post.id}/`}><h3>{post.data.title}</h3></a>
+							<a href={localUrl(`/blog/${post.id}/`)}><h3>{post.data.title}</h3></a>
 						</li>
 					))}
 				</ol>}

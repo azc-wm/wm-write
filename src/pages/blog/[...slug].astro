@@ -1,11 +1,12 @@
 ---
+import { isVisiblePost } from '../../lib/content/visibility';
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 import Prose from '../../components/Prose.astro';
 import { getArticleBundle } from '../../lib/content/article-bundle-astro';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
+	const posts = await getCollection('blog', ({ data }) => isVisiblePost(data));
 	return posts.map((post) => ({
 		params: { slug: post.id },
 		props: post,

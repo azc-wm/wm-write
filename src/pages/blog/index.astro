@@ -1,12 +1,14 @@
 ---
+import { isVisiblePost } from '../../lib/content/visibility';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { site } from '../../site.config';
+import { localUrl } from '../../lib/urls';
 
-const posts = (await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft)).sort(
+const posts = (await getCollection('blog', ({ data }) => isVisiblePost(data))).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) => a.localeCompare(b));
@@ -81,7 +83,7 @@ const archive = posts.reduce<{ year: number; months: { month: number; label: str
 									{monthGroup.posts.map((post) => (
 										<li class="writing-entry">
 											<p class="date"><FormattedDate date={post.data.pubDate} /></p>
-											<a href={`/blog/${post.id}/`} class="writing-entry-content">
+											<a href={localUrl(`/blog/${post.id}/`)} class="writing-entry-content">
 												<h3 class="title">{post.data.title}</h3>
 												<p class="description">{post.data.description}</p>
 												{post.data.tags?.length && <p class="tags">{post.data.tags.map((tag) => <span>#{tag}</span>)}</p>}

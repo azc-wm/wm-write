@@ -3,6 +3,7 @@ import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
 import KeyboardController from './KeyboardController.astro';
 import { canIndex, site } from '../site.config';
+import { localUrl } from '../lib/urls';
 
 interface Props {
 	title: string;
@@ -15,16 +16,16 @@ interface Props {
 }
 
 const { title, description, image, article = false, pubDate, updatedDate, indexable = canIndex } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, site.url);
-const socialImage = new URL(typeof image === 'string' ? image : image?.src ?? site.seo.socialImage, site.url);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? site.url);
+const socialImage = new URL(typeof image === 'string' && /^https?:\/\//.test(image) ? image : localUrl(typeof image === 'string' ? image : image?.src ?? site.seo.socialImage), Astro.site ?? site.url);
 const pageTitle = title === site.title ? title : `${title} | ${site.title}`;
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="sitemap" href={new URL('/sitemap-index.xml', site.url)} />
-<link rel="alternate" type="application/rss+xml" title={site.title} href={new URL('/rss.xml', site.url)} />
+<link rel="icon" type="image/svg+xml" href={localUrl("/favicon.svg")} />
+<link rel="sitemap" href={new URL(localUrl('/sitemap-index.xml'), Astro.site)} />
+<link rel="alternate" type="application/rss+xml" title={site.title} href={new URL(localUrl('/rss.xml'), Astro.site)} />
 <meta name="generator" content={Astro.generator} />
 
 <script define:vars={{ defaultTheme: site.theme.default }}>

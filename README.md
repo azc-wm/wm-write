@@ -50,7 +50,7 @@ src/content/blog/my-post/
     └── image.png
 ```
 
-Use frontmatter fields `title`, `description`, `pubDate`, `updatedDate`, `draft`, and `tags`. Drafts appear during development and are excluded from production pages, RSS, and sitemap. The included demo articles are drafts, so they remain available while developing and do not ship in production unless you remove `draft: true`. `customizing-the-starter` provides a short setup walkthrough, while `kitchen-sink` demonstrates the article features and explains when to use Markdown or MDX.
+Use frontmatter fields `title`, `description`, `pubDate`, `updatedDate`, `draft`, and `tags`. Drafts appear during development and are excluded from ordinary production pages, RSS, and sitemap. Set `SITE_DEMO=true` at build time to include drafts in a static showcase, without changing their frontmatter. The included example articles remain drafts by default. `customizing-the-starter` provides a short setup walkthrough, while `kitchen-sink` demonstrates the article features and explains when to use Markdown or MDX.
 
 Both sidecars are optional. Name them exactly `left-aside.mdx` and `right-aside.mdx`; no frontmatter or registry is needed. Reference colocated images with paths such as `./assets/image.png`. Supported image formats are AVIF, GIF, JPEG, JPG, PNG, SVG, and WebP.
 
@@ -78,7 +78,7 @@ See the [keyboard navigation contract](docs/features/keyboard-navigation.md) for
 
 ## SEO, RSS, and sitemap
 
-Canonical URLs and the Astro sitemap use `site.url`. The sitemap and `/rss.xml` are built in. RSS uses the configured title, description, URL, language, and author email, includes non-draft posts newest first, and provides post summaries and tags.
+Canonical URLs and the Astro sitemap use `SITE_URL` when set, otherwise `site.url`. `SITE_BASE` controls subpath deployment (default `/`). The sitemap and `/rss.xml` are built in. RSS uses the configured title, description, URL, language, and author email, includes non-draft posts newest first, and provides post summaries and tags.
 
 For non-production builds, `/robots.txt` disallows crawling and every page emits `noindex, nofollow`. Production indexability also requires `site.seo.index: true`. When enabled, robots allows crawling and points to the configured sitemap.
 
@@ -133,8 +133,14 @@ See the [design principles](docs/design/design-principles.md) for the visual phi
 
 ## License
 
-wm-write is source-available under the MIT License with the Commons Clause License Condition v1.0.
+wm-write is source-available under the MIT License with an additional restriction on commercial redistribution as a reusable template or equivalent software product.
 
-You may use, modify, fork, and redistribute wm-write for personal or commercial projects, including monetized websites. You may not sell wm-write itself, or a product or service whose value derives entirely or substantially from wm-write.
+You may use wm-write for monetized websites, paid client work, customization, consulting, maintenance, and hosting. You may not sell wm-write or a modified derivative as a reusable template, theme, starter kit, boilerplate, or substantially equivalent software product. This combined license is not OSI-approved.
 
 See [LICENSE](LICENSE) for the complete terms.
+
+## GitHub Pages showcase
+
+The unmodified starter content is deployed from `main` to [the live demo](https://azc-wm.github.io/wm-write/). To enable deployment, choose **Settings → Pages → Build and deployment → GitHub Actions** in the repository.
+
+Deployment configuration is supplied at build time: `SITE_URL=https://azc-wm.github.io`, `SITE_BASE=/wm-write/`, and `SITE_ENV=production`, and `SITE_DEMO=true` to include example drafts. For a root-domain deployment, omit `SITE_BASE` (it defaults to `/`). Local links are resolved relative to Astro's base URL. The deployment is indexable; the 404 page remains `noindex`.
