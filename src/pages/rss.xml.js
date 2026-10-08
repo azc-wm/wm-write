@@ -1,5 +1,5 @@
 // @ts-check
-
+import { isVisiblePost } from '../lib/content/visibility';
 import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
 import { site } from '../site.config';
@@ -7,7 +7,7 @@ import { localUrl } from '../lib/urls';
 
 /** @param {import('astro').APIContext} context */
 export async function GET({ site: astroSite }) {
-	const posts = (await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft))
+	const posts = (await getCollection('blog', ({ data }) => isVisiblePost(data)))
 		.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 	return rss({
 		title: site.title,
