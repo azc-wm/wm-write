@@ -35,6 +35,7 @@ jobs:
       - run: pnpm build
         env:
           SITE_ENV: production
+          SITE_DEMO: 'true'
           SITE_URL: https://azc-wm.github.io
           SITE_BASE: /wm-write/
       - uses: actions/configure-pages@v5
