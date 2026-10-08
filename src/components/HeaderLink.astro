@@ -7,7 +7,7 @@ type Props = HTMLAttributes<'a'> & { shortcut?: string };
 const { href, class: className, shortcut, ...props } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const pathname = '/' + Astro.url.pathname.slice(base.length).replace(/^\/+/, '');
-const localHref = '/' + (base && href?.startsWith(base + '/') ? href.slice(base.length) : href ?? '/').replace(/^\/+/, '');
+const localHref = '/' + (base && href?.startsWith(base + '/') ? href.slice(base.length) : (href ?? '/')).replace(/^\/+/, '');
 const subpath = pathname.match(/[^\/]+/g);
 const isActive = localHref === pathname || localHref === '/' + (subpath?.[0] || '');
 ---
