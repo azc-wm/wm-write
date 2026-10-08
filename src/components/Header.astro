@@ -1,12 +1,13 @@
 ---
 import HeaderLink from './HeaderLink.astro';
 import { site } from '../site.config';
+import { localUrl } from '../lib/urls';
 ---
 
 <header>
 	<nav>
 		<div class="primary-links">
-			{site.navigation.map(({ label, href, shortcut }) => <HeaderLink href={href} shortcut={shortcut}>{label}</HeaderLink>)}
+			{site.navigation.map(({ label, href, shortcut }) => <HeaderLink href={localUrl(href)} shortcut={shortcut}>{label}</HeaderLink>)}
 		</div>
 	</nav>
 </header>
