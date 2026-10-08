@@ -1,6 +1,6 @@
 # Site configuration
 
-`src/site.config.ts` is the public configuration entry point for site identity and behavior. Astro components consume these values directly, and `astro.config.mjs` derives its canonical `site` value from the same URL.
+`src/site.config.ts` is the public configuration entry point for site identity and behavior. Astro components consume these values directly. `astro.config.mjs` uses `SITE_URL` when set, falling back to `site.url`, and uses `SITE_BASE` for subpath deployments.
 
 ```ts
 export const site = {
@@ -36,7 +36,7 @@ export const site = {
 
 - `title` is the site name, base page title and RSS title.
 - `description` is the default page and RSS description.
-- `url` is the absolute canonical origin. Astro, canonical links, RSS, sitemap, robots and social metadata reuse it.
+- `url` is the default absolute canonical origin. `SITE_URL` overrides the build origin for Astro, canonical links, RSS, sitemap, robots and social metadata.
 - `language` is the document and RSS language and controls displayed publication-date formatting. Use a BCP 47 tag such as `en`, `es` or `ca-ES`.
 - `theme.default` accepts `light`, `dark` or `system`. It controls initial behavior, not palette values.
 - `author.name` appears in the footer copyright.
@@ -67,6 +67,6 @@ The main configuration describes identity and behavior. Other public customizati
 - typography, spacing and layout scales live in `src/styles/tokens.css`;
 - semantic palettes live in `src/styles/themes/`;
 - the favicon and default social image use files under `public/`;
-- `SITE_ENV` belongs to the build environment.
+- `SITE_ENV`, `SITE_URL`, `SITE_BASE`, and `SITE_DEMO` belong to the build environment. `SITE_DEMO=true` includes draft articles in static builds, including RSS and sitemap.
 
 Routes, layouts, sidecars, RSS, sitemap, KaTeX, Mermaid and keyboard controllers are opinionated starter behavior rather than feature flags.
