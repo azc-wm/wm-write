@@ -5,6 +5,7 @@ import rss from '@astrojs/rss';
 import { site } from '../site.config';
 import { localUrl } from '../lib/urls';
 
+/** @param {import('astro').APIContext} context */
 export async function GET({ site: astroSite }) {
 	const posts = (await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft))
 		.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
