@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { isVisiblePost } from '../../lib/content/visibility';import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
@@ -7,7 +7,7 @@ import Header from '../../components/Header.astro';
 import { site } from '../../site.config';
 import { localUrl } from '../../lib/urls';
 
-const posts = (await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft)).sort(
+const posts = (await getCollection('blog', ({ data }) => isVisiblePost(data))).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) => a.localeCompare(b));
