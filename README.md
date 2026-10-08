@@ -138,3 +138,9 @@ wm-write is source-available under the MIT License with the Commons Clause Licen
 You may use, modify, fork, and redistribute wm-write for personal or commercial projects, including monetized websites. You may not sell wm-write itself, or a product or service whose value derives entirely or substantially from wm-write.
 
 See [LICENSE](LICENSE) for the complete terms.
+
+## GitHub Pages showcase
+
+The unmodified starter content is deployed from `main` to [the live demo](https://azc-wm.github.io/wm-write/). To enable deployment, choose **Settings → Pages → Build and deployment → GitHub Actions** in the repository.
+
+Deployment configuration is supplied at build time: `SITE_URL=https://azc-wm.github.io`, `SITE_BASE=/wm-write/`, and `SITE_ENV=production`. For a root-domain deployment, omit `SITE_BASE` (it defaults to `/`). Local links are resolved relative to Astro's base URL. The deployment is indexable; the 404 page remains `noindex`.
