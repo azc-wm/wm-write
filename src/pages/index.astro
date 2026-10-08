@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { isVisiblePost } from '../lib/content/visibility';import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
@@ -8,7 +8,7 @@ import { site } from '../site.config';
 import { localUrl } from '../lib/urls';
 import { Content as Welcome } from '../content/welcome.mdx';
 
-const latestPosts = (await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft))
+const latestPosts = (await getCollection('blog', ({ data }) => isVisiblePost(data)))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 3);
 ---
